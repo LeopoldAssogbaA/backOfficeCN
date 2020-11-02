@@ -59,13 +59,13 @@ const routes = [
   },
   {
     path: "/customers/create",
-    exact: true,
+    exact: false,
     name: "Clients",
     component: () => <CustomerForm />,
   },
   {
     path: "/customers/edit/:id",
-    exact: true,
+    exact: false,
     name: "Clients",
     component: () => <CustomerForm />,
   },
@@ -83,7 +83,7 @@ const routes = [
   },
   {
     path: "/booking/edit/:id",
-    exact: true,
+    exact: false,
     name: "Réservations",
     component: () => <BookingForm />,
   },

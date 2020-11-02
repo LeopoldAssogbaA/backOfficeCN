@@ -1,18 +1,36 @@
-import React from "react";
-import { withRouter } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useHistory, withRouter } from "react-router-dom";
 import { RollbackOutlined, SaveOutlined } from "@ant-design/icons";
 import { Input, Form, Button } from "antd";
 
 import "./Form.less";
+import api from "../../services/api";
 
 const RoomsForm = ({ match }) => {
+  const history = useHistory();
   const [form] = Form.useForm();
-  const initialValues = {
-    number: 5,
-    area: 65,
-    price: 300,
-    apartmentId: "2 Avenue Jean Jaures",
-  };
+  const initialValues = {};
+  const [room, setRoom] = useState(null);
+  const [roomLoaded, setRoomLoaded] = useState(false);
+  // handle rooms delete
+  // const [roomsBeforeUpdate, setroomsBeforeUpdate] = useState([]);
+
+  useEffect(() => {
+    const id = match.params.id;
+    if (!roomLoaded && id !== undefined) {
+      api.fetch("room", id).then((response) => {
+        console.log("response fetch room", response);
+        setRoom(response.data.room);
+        form.setFieldsValue({
+          number: response.data.room.number,
+          area: response.data.room.area,
+          price: response.data.room.price,
+          apartment: response.data.room.apartment.name,
+        });
+        setRoomLoaded(true);
+      });
+    }
+  }, [roomLoaded, match, form]);
 
   const onFormFinish = (values) => {
     console.log("onFormFinish(), values:", values);
@@ -32,6 +50,8 @@ const RoomsForm = ({ match }) => {
     },
   };
 
+  console.log("initialValues", initialValues);
+
   return (
     <div className="roomsFormContainer container">
       <div className="titleContainer">
@@ -46,12 +66,12 @@ const RoomsForm = ({ match }) => {
           form={form}
           onFinish={onFormFinish}
         >
-          <Form.Item label="Numéro" name="number" value="number">
-            <Input placeholder="Numéro" type="number" />
+          <Form.Item label="Numéro" name="number">
+            <Input placeholder="Numéro" type="text" />
           </Form.Item>
           {/* TODO: edit validators */}
           <Form.Item
-            label="Surface"
+            label="Emplacement"
             name="area"
             rules={[
               {
@@ -64,10 +84,10 @@ const RoomsForm = ({ match }) => {
               },
             ]}
           >
-            <Input placeholder="Surface" type="number" />
+            <Input placeholder="Emplacement" type="text" />
           </Form.Item>
           <Form.Item
-            label="Surface"
+            label="Emplacement"
             name="area"
             rules={[
               {
@@ -80,7 +100,7 @@ const RoomsForm = ({ match }) => {
               },
             ]}
           >
-            <Input placeholder="Surface" type="number" />
+            <Input placeholder="Emplacement" type="text" />
           </Form.Item>
           <Form.Item
             label="Prix"
@@ -96,24 +116,20 @@ const RoomsForm = ({ match }) => {
               },
             ]}
           >
-            <Input placeholder="Prix" type="number" />
+            <Input placeholder="Prix" type="text" />
           </Form.Item>
           {/* TODO: replace by Select */}
           <Form.Item
             label="Appartement"
-            name="appartementId"
+            name="apartment"
             rules={[
               {
                 required: true,
-                message: "Saisissez un prix",
-              },
-              {
-                min: 5,
-                message: "Votre prix est trop bas",
+                message: "Choisissez un appartement",
               },
             ]}
           >
-            <Input placeholder="Prix" type="text" />
+            <Input placeholder="Appartement" type="text" />
           </Form.Item>
 
           <Form.Item wrapperCol={formLayout}>
@@ -127,7 +143,7 @@ const RoomsForm = ({ match }) => {
             <Button
               type="default"
               icon={<RollbackOutlined />}
-              onClick={() => {}}
+              onClick={() => history.push("/rooms")}
             />
           </Form.Item>
         </Form>

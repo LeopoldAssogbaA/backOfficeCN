@@ -1,5 +1,14 @@
-import { Button, Checkbox, Input, Popconfirm, Space, Table, Form } from "antd";
-import React, { useState } from "react";
+import {
+  Button,
+  Checkbox,
+  Input,
+  Popconfirm,
+  Space,
+  Table,
+  Form,
+  Empty,
+} from "antd";
+import React, { useEffect, useState } from "react";
 import {
   DeleteOutlined,
   EditOutlined,
@@ -11,19 +20,32 @@ import {
 import { v4 as uuidv4 } from "uuid";
 
 import "./Form.less";
-import { withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
+import api from "../../services/api";
 
 const ApartmentsForm = ({ match }) => {
   const [form] = Form.useForm();
   const initialValues = { name: "", multiple: false };
+  const [apartment, setApartment] = useState(null);
+  const [apartmentLoaded, setApartmentLoaded] = useState(false);
   // handle rooms delete
   const [roomsToDelete, setroomsToDelete] = useState([]);
   // const [roomsBeforeUpdate, setroomsBeforeUpdate] = useState([]);
 
+  useEffect(() => {
+    const id = match.params.id;
+    if (!apartmentLoaded && id !== undefined) {
+      api.fetch("apartment", id).then((response) => {
+        console.log("response fetch apartment", response);
+        setApartmentLoaded(true);
+      });
+    }
+  }, [apartmentLoaded, match]);
+
   const onFormFinish = (values) => {
     console.log("onFormFinish(), values:", values);
     console.log("onFormFinish(), rooms:", rooms);
-    // check that question has one room at least
+    // check that appartment has one room at least
   };
 
   // ------- rooms management -------
@@ -81,7 +103,10 @@ const ApartmentsForm = ({ match }) => {
     if (existingNewroom) {
       return;
     }
-    setRooms((rooms) => [...rooms, { key: "new", label: "", valid: false }]);
+    setRooms((rooms) => [
+      ...rooms,
+      { key: "new", number: "", area: "0", price: "0" },
+    ]);
     roomsForm.setFieldsValue({
       label: "",
       valid: false,
@@ -222,6 +247,8 @@ const ApartmentsForm = ({ match }) => {
       lg: { span: 22 },
     },
   };
+
+  console.log("match.params.id", match.params.id);
   return (
     <div className="roomsFormContainer container">
       <div className="titleContainer">
@@ -261,6 +288,7 @@ const ApartmentsForm = ({ match }) => {
         <Form form={roomsForm} {...formLayout}>
           <Form.Item label="Chambres">
             <Table
+              loading={match.params.id === undefined ? false : !apartmentLoaded}
               components={{
                 body: {
                   cell: EditableCell,
@@ -274,6 +302,14 @@ const ApartmentsForm = ({ match }) => {
               pagination={{
                 style: { visibility: "hidden" },
                 hideOnSinglePage: true,
+              }}
+              locale={{
+                emptyText: (
+                  <Empty
+                    description={<span>Aucune chambre</span>}
+                    image={Empty.PRESENTED_IMAGE_SIMPLE}
+                  ></Empty>
+                ),
               }}
             />
             <Button
@@ -298,11 +334,13 @@ const ApartmentsForm = ({ match }) => {
           >
             {match.params.id !== undefined ? "Enregister" : "Créer"}
           </Button>
-          <Button
-            type="default"
-            icon={<RollbackOutlined />}
-            onClick={() => {}}
-          />
+          <Link to="/apartments">
+            <Button
+              type="default"
+              icon={<RollbackOutlined />}
+              onClick={() => {}}
+            />
+          </Link>
         </Form.Item>
       </div>
     </div>

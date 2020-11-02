@@ -7,6 +7,7 @@ import routes from "./constants/routes";
 import "./App.less";
 
 // TODO: clean node warnings
+// TODO: add Sliders
 
 const App = () => {
   return (

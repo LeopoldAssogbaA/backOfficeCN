@@ -1,4 +1,4 @@
-import { withRouter } from "react-router-dom";
+import { useHistory, withRouter } from "react-router-dom";
 import React from "react";
 import { Input, Form, Button } from "antd";
 
@@ -6,6 +6,7 @@ import "./Form.less";
 import { RollbackOutlined, SaveOutlined } from "@ant-design/icons";
 
 const BookingForm = ({ match }) => {
+  const history = useHistory();
   const [form] = Form.useForm();
   const initialValues = {
     clientId: "Jean Bon",
@@ -77,7 +78,7 @@ const BookingForm = ({ match }) => {
             <Button
               type="default"
               icon={<RollbackOutlined />}
-              onClick={() => {}}
+              onClick={() => history.push("/booking")}
             />
           </Form.Item>
         </Form>

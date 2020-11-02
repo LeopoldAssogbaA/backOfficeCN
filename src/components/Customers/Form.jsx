@@ -1,24 +1,20 @@
-import { withRouter } from "react-router-dom";
-import React from "react";
+import { useHistory, withRouter } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { Input, Form, Button } from "antd";
 
 import "./Form.less";
 import { RollbackOutlined, SaveOutlined } from "@ant-design/icons";
+import api from "../../services/api";
 
 const CustomersForm = ({ match }) => {
+  const history = useHistory();
   const [form] = Form.useForm();
-  const initialValues = {
-    firstName: "Jean",
-    lastName: "Bon",
-    email: "jeanBon@email.com",
-    phone: "06 62 62 62 62",
-    birthDate: "1 janvier 2020",
-  };
-
-  const onFormFinish = (values) => {
-    console.log("onFormFinish(), values:", values);
-    // check that question has one room at least
-  };
+  const initialValues = { name: "", multiple: false };
+  const [customer, setCustomer] = useState(null);
+  const [customerLoaded, setCustomerLoaded] = useState(false);
+  // handle rooms delete
+  const [roomsToDelete, setroomsToDelete] = useState([]);
+  // const [roomsBeforeUpdate, setroomsBeforeUpdate] = useState([]);
 
   const formLayout = {
     labelCol: {
@@ -31,6 +27,28 @@ const CustomersForm = ({ match }) => {
       md: { span: 20 },
       lg: { span: 22 },
     },
+  };
+
+  useEffect(() => {
+    const id = match.params.id;
+    if (!customerLoaded && id !== undefined) {
+      api.fetch("client", id).then((response) => {
+        console.log("response fetch customer", response.data);
+        setCustomerLoaded(true);
+        form.setFieldsValue({
+          firstName: response.data.client.firstName,
+          lastName: response.data.client.lastName,
+          email: response.data.client.email,
+          birthDate: response.data.client.birthDate,
+          phone: response.data.client.phone,
+        });
+      });
+    }
+  }, [customerLoaded, form, match]);
+
+  const onFormFinish = (values) => {
+    console.log("onFormFinish(), values:", values);
+    // check that appartment has one room at least
   };
 
   return (
@@ -110,7 +128,7 @@ const CustomersForm = ({ match }) => {
               },
             ]}
           >
-            <Input placeholder="Numéro de téléphone" />
+            <Input placeholder="Numéro de téléphone" type="phone" />
           </Form.Item>
           {/* Upgrade with date picker */}
           <Form.Item
@@ -141,7 +159,7 @@ const CustomersForm = ({ match }) => {
             <Button
               type="default"
               icon={<RollbackOutlined />}
-              onClick={() => {}}
+              onClick={() => history.push("/customers")}
             />
           </Form.Item>
         </Form>
