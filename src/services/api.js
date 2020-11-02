@@ -22,12 +22,11 @@ class Api {
       axios.put(`${APIURL}${path}`, data, {
         headers: {
           "Content-Type": "application/json",
-          // "Access-Control-Request-Headers": "Content-Type",
-          "Access-Control-Allow-Origin":
-            "https://app-booking-christ.herokuapp.com/",
-          "Access-Control-Allow-Methods": "DELETE, POST, GET, OPTIONS, PUT",
-          Accept: "application/vnd.heroku+json; version=3",
-          // "Access-Control-Allow-Credentials": "true",
+          Accept: "application/json, text/plain, */*",
+          "Accept-Encoding": "gzip, deflate, br",
+          "Access-Control-Allow-Headers":
+            "Origin, X-Requested-With, Content-Type, Accept",
+          "Access-Control-Allow-Origin": "*",
         },
       }),
 

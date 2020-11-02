@@ -1,15 +1,6 @@
 import { useHistory, withRouter } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import {
-  Input,
-  Form,
-  Button,
-  Row,
-  Col,
-  Select,
-  TreeSelect,
-  message,
-} from "antd";
+import { Form, Button, Row, Col, Select, TreeSelect, message } from "antd";
 
 import "./Form.less";
 import { RollbackOutlined, SaveOutlined } from "@ant-design/icons";
@@ -100,6 +91,15 @@ const BookingForm = ({ match }) => {
     },
   };
 
+  const getFormItemLayout = () =>
+    Object.keys(formLayout.wrapperCol).reduce((formItemLayout, breakpoint) => {
+      formItemLayout[breakpoint] = {
+        span: formLayout.wrapperCol[breakpoint].span,
+        offset: formLayout.labelCol[breakpoint].span,
+      };
+      return formItemLayout;
+    }, {});
+
   function onChange(value) {
     console.log(`selected ${value}`);
     setApartmentId(value);
@@ -169,8 +169,9 @@ const BookingForm = ({ match }) => {
                 />
               </Form.Item>
 
-              <Form.Item wrapperCol={formLayout}>
+              <Form.Item wrapperCol={getFormItemLayout()}>
                 <Button
+                  style={{ marginRight: "1em" }}
                   type="primary"
                   icon={<SaveOutlined />}
                   onClick={() => form.submit()}

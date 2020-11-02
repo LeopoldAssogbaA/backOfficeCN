@@ -13,22 +13,6 @@ const CustomersForm = ({ match }) => {
   const initialValues = { name: "", multiple: false };
   const [customer, setCustomer] = useState(null);
   const [customerLoaded, setCustomerLoaded] = useState(false);
-  // handle rooms delete
-  const [roomsToDelete, setroomsToDelete] = useState([]);
-  // const [roomsBeforeUpdate, setroomsBeforeUpdate] = useState([]);
-
-  const formLayout = {
-    labelCol: {
-      xs: { span: 24 },
-      md: { span: 4 },
-      lg: { span: 2 },
-    },
-    wrapperCol: {
-      xs: { span: 24 },
-      md: { span: 20 },
-      lg: { span: 22 },
-    },
-  };
 
   useEffect(() => {
     const id = match.params.id;
@@ -58,6 +42,28 @@ const CustomersForm = ({ match }) => {
       }
     });
   };
+
+  const formLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      md: { span: 4 },
+      lg: { span: 2 },
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      md: { span: 20 },
+      lg: { span: 22 },
+    },
+  };
+
+  const getFormItemLayout = () =>
+    Object.keys(formLayout.wrapperCol).reduce((formItemLayout, breakpoint) => {
+      formItemLayout[breakpoint] = {
+        span: formLayout.wrapperCol[breakpoint].span,
+        offset: formLayout.labelCol[breakpoint].span,
+      };
+      return formItemLayout;
+    }, {});
 
   return (
     <div className="customersFormContainer container">
@@ -158,8 +164,9 @@ const CustomersForm = ({ match }) => {
                 <Input placeholder="Date de naissance" />
               </Form.Item>
 
-              <Form.Item>
+              <Form.Item wrapperCol={getFormItemLayout()}>
                 <Button
+                  style={{ marginRight: "1em" }}
                   type="primary"
                   icon={<SaveOutlined />}
                   onClick={() => form.submit()}

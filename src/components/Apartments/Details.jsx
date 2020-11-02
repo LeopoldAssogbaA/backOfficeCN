@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { Card, Row, Col, Divider, List, Popconfirm, message } from "antd";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
 
 import api from "../../services/api";
 
@@ -10,7 +10,6 @@ import "./Details.less";
 const { Meta } = Card;
 
 const ApartmentsDetails = ({ match }) => {
-  const history = useHistory();
   const [apartments, setApartments] = useState(null);
   const [apartmentsLoaded, setApartmentsLoaded] = useState(false);
   const currentApart =
@@ -92,13 +91,13 @@ const ApartmentsDetails = ({ match }) => {
               loading={!apartmentsLoaded}
               cover={<img alt="example" src="/assets/img/apart2.jpg" />}
               actions={[
-                <EditOutlined
-                  disabled
-                  key="edit"
-                  onClick={() => {
-                    history.push(`/apartments/edit/${currentApart.id}`);
-                  }}
-                />,
+                // <EditOutlined
+                //   disabled
+                //   key="edit"
+                //   onClick={() => {
+                //     history.push(`/apartments/edit/${currentApart.id}`);
+                //   }}
+                // />,
                 <Popconfirm
                   title={`Êtes-vous sûr de vouloir supprimer l'appartement « ${currentApart.name} » ?`}
                   onConfirm={() => deleteApartment(currentApart.id)}

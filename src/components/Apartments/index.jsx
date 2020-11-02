@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Button, Col, message, Popconfirm, Row, Space, Table, Tag } from "antd";
 import {
   DeleteOutlined,
-  EditOutlined,
   InfoCircleOutlined,
   PlusOutlined,
 } from "@ant-design/icons";

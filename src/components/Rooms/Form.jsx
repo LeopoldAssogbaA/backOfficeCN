@@ -6,7 +6,6 @@ import { Input, Form, Button, Row, Col, message, Select } from "antd";
 import "./Form.less";
 import api from "../../services/api";
 import layout from "../../constants/layout";
-import Axios from "axios";
 
 const { Option } = Select;
 
@@ -96,6 +95,15 @@ const RoomsForm = ({ match }) => {
 
   console.log("initialValues", initialValues);
 
+  const getFormItemLayout = () =>
+    Object.keys(formLayout.wrapperCol).reduce((formItemLayout, breakpoint) => {
+      formItemLayout[breakpoint] = {
+        span: formLayout.wrapperCol[breakpoint].span,
+        offset: formLayout.labelCol[breakpoint].span,
+      };
+      return formItemLayout;
+    }, {});
+
   return (
     <div className="roomsFormContainer container">
       <div className="titleContainer">
@@ -173,8 +181,9 @@ const RoomsForm = ({ match }) => {
                 </Select>
               </Form.Item>
 
-              <Form.Item wrapperCol={formLayout}>
+              <Form.Item wrapperCol={getFormItemLayout()}>
                 <Button
+                  style={{ marginRight: "1em" }}
                   type="primary"
                   icon={<SaveOutlined />}
                   onClick={() => form.submit()}

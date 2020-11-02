@@ -1,6 +1,5 @@
 import {
   Button,
-  Checkbox,
   Input,
   Popconfirm,
   Space,
@@ -11,7 +10,7 @@ import {
   Col,
   message,
 } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   DeleteOutlined,
   EditOutlined,
@@ -31,21 +30,21 @@ const ApartmentsForm = ({ match }) => {
   const history = useHistory();
   const [form] = Form.useForm();
   const initialValues = { name: "", multiple: false };
-  const [apartment, setApartment] = useState(null);
-  const [apartmentLoaded, setApartmentLoaded] = useState(false);
-  // handle rooms delete
   const [roomsToDelete, setroomsToDelete] = useState([]);
+  // const [apartment, setApartment] = useState(null);
+  // const [apartmentLoaded, setApartmentLoaded] = useState(false);
+  // handle rooms delete
   // const [roomsBeforeUpdate, setroomsBeforeUpdate] = useState([]);
 
-  useEffect(() => {
-    const id = match.params.id;
-    if (!apartmentLoaded && id !== undefined) {
-      api.fetch("apartment", id).then((response) => {
-        console.log("response fetch apartment", response);
-        setApartmentLoaded(true);
-      });
-    }
-  }, [apartmentLoaded, match]);
+  // useEffect(() => {
+  //   const id = match.params.id;
+  //   if (!apartmentLoaded && id !== undefined) {
+  //     api.fetch("apartment", id).then((response) => {
+  //       console.log("response fetch apartment", response);
+  //       setApartmentLoaded(true);
+  //     });
+  //   }
+  // }, [apartmentLoaded, match]);
 
   const onFormFinish = (values) => {
     const newApartment = {
@@ -66,7 +65,7 @@ const ApartmentsForm = ({ match }) => {
     });
 
     console.log("newApartment", newApartment);
-    // check that appartment has one room at least
+    // TODO: check that appartment has one room at least
   };
 
   // ------- rooms management -------
@@ -268,6 +267,15 @@ const ApartmentsForm = ({ match }) => {
     },
   };
 
+  const getFormItemLayout = () =>
+    Object.keys(formLayout.wrapperCol).reduce((formItemLayout, breakpoint) => {
+      formItemLayout[breakpoint] = {
+        span: formLayout.wrapperCol[breakpoint].span,
+        offset: formLayout.labelCol[breakpoint].span,
+      };
+      return formItemLayout;
+    }, {});
+
   console.log("match.params.id", match.params.id);
   return (
     <div className="roomsFormContainer container">
@@ -310,9 +318,6 @@ const ApartmentsForm = ({ match }) => {
             <Form form={roomsForm} {...formLayout}>
               <Form.Item label="Chambres">
                 <Table
-                  loading={
-                    match.params.id === undefined ? false : !apartmentLoaded
-                  }
                   components={{
                     body: {
                       cell: EditableCell,
@@ -337,6 +342,7 @@ const ApartmentsForm = ({ match }) => {
                   }}
                 />
                 <Button
+                  style={{ marginTop: "1em" }}
                   type="default"
                   icon={<PlusOutlined />}
                   onClick={() => roomAdd()}
@@ -350,8 +356,9 @@ const ApartmentsForm = ({ match }) => {
                 )}
               </Form.Item>
             </Form>
-            <Form.Item wrapperCol={formLayout}>
+            <Form.Item wrapperCol={getFormItemLayout()}>
               <Button
+                style={{ marginRight: "1em" }}
                 type="primary"
                 icon={<SaveOutlined />}
                 onClick={() => form.submit()}
