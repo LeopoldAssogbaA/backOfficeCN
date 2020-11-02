@@ -1,6 +1,6 @@
 import { useHistory, withRouter } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { Input, Form, Button, Row, Col } from "antd";
+import { Input, Form, Button, Row, Col, message } from "antd";
 
 import "./Form.less";
 import { RollbackOutlined, SaveOutlined } from "@ant-design/icons";
@@ -50,6 +50,13 @@ const CustomersForm = ({ match }) => {
   const onFormFinish = (values) => {
     console.log("onFormFinish(), values:", values);
     // check that appartment has one room at least
+    api.create("client", values).then((res) => {
+      if (res.status === 201) {
+        message.success("Le nouvel utilisateur a été enregistré.");
+        console.log("res", res);
+        history.push("/customers");
+      }
+    });
   };
 
   return (

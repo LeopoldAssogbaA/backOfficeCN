@@ -93,7 +93,7 @@ const Customers = () => {
             onClick={() => history.push(`customers/edit/${record.id}`)}
           />
           <Popconfirm
-            title={`Êtes-vous sûr de vouloir supprimer l'appartement « ${record.name} » ?`}
+            title={`Êtes-vous sûr de vouloir supprimer le client « ${record.firstName} ${record.lastName} » ?`}
             onConfirm={() => deleteCustomer(record.id)}
           >
             <Button icon={<DeleteOutlined />} type="danger" />
@@ -104,6 +104,7 @@ const Customers = () => {
   ];
 
   const deleteCustomer = (id) => {
+    console.log(id);
     api
       .delete("customers", id)
       .then((response) => {

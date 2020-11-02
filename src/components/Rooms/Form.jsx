@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, withRouter } from "react-router-dom";
 import { RollbackOutlined, SaveOutlined } from "@ant-design/icons";
-import { Input, Form, Button, Row, Col } from "antd";
+import { Input, Form, Button, Row, Col, message, Select } from "antd";
 
 import "./Form.less";
 import api from "../../services/api";
 import layout from "../../constants/layout";
+import Axios from "axios";
+
+const { Option } = Select;
 
 const RoomsForm = ({ match }) => {
   const history = useHistory();
@@ -13,8 +16,20 @@ const RoomsForm = ({ match }) => {
   const initialValues = {};
   const [room, setRoom] = useState(null);
   const [roomLoaded, setRoomLoaded] = useState(false);
+  const [apartments, setApartments] = useState([]);
+  const [apartmentsLoaded, setApartmentsLoaded] = useState(false);
   // handle rooms delete
   // const [roomsBeforeUpdate, setroomsBeforeUpdate] = useState([]);
+
+  useEffect(() => {
+    if (!apartmentsLoaded) {
+      api.fetchCollection("apartment").then((response) => {
+        console.log("response fetch apartment", response);
+        setApartments(response.data.apartments);
+        setApartmentsLoaded(true);
+      });
+    }
+  }, [apartmentsLoaded, match]);
 
   useEffect(() => {
     const id = match.params.id;
@@ -35,7 +50,31 @@ const RoomsForm = ({ match }) => {
 
   const onFormFinish = (values) => {
     console.log("onFormFinish(), values:", values);
-    // check that question has one room at least
+    const id = match.params.id;
+    const apartmentId = apartments.find((a) => a.name === values.apartment).id;
+    const newRoom = {
+      number: values.number,
+      area: values.area,
+      price: values.price,
+      apartmentId,
+    };
+    console.log("newRoom", newRoom);
+
+    if (id === undefined) {
+      api.create("room", newRoom).then((response) => {
+        if (response.status === 201) {
+          message.success("Votre chambre à été enregistrée.");
+          history.push("/rooms");
+        }
+      });
+    } else {
+      api.update("room", id, newRoom).then((response) => {
+        if (response.status === 201) {
+          message.success("Votre chambre à été enregistrée.");
+          history.push("/rooms");
+        }
+      });
+    }
   };
 
   const formLayout = {
@@ -50,6 +89,10 @@ const RoomsForm = ({ match }) => {
       lg: { span: 22 },
     },
   };
+
+  function onChange(value) {
+    console.log(`selected ${value}`);
+  }
 
   console.log("initialValues", initialValues);
 
@@ -81,26 +124,6 @@ const RoomsForm = ({ match }) => {
                     required: true,
                     message: "Saisissez une surface",
                   },
-                  {
-                    min: 5,
-                    message: "Votre une surface est trop petite",
-                  },
-                ]}
-              >
-                <Input placeholder="Emplacement" type="text" />
-              </Form.Item>
-              <Form.Item
-                label="Emplacement"
-                name="area"
-                rules={[
-                  {
-                    required: true,
-                    message: "Saisissez une surface",
-                  },
-                  {
-                    min: 5,
-                    message: "Votre une surface est trop petite",
-                  },
                 ]}
               >
                 <Input placeholder="Emplacement" type="text" />
@@ -112,10 +135,6 @@ const RoomsForm = ({ match }) => {
                   {
                     required: true,
                     message: "Saisissez un prix",
-                  },
-                  {
-                    min: 5,
-                    message: "Votre prix est trop bas",
                   },
                 ]}
               >
@@ -132,7 +151,26 @@ const RoomsForm = ({ match }) => {
                   },
                 ]}
               >
-                <Input placeholder="Appartement" type="text" />
+                <Select
+                  showSearch
+                  placeholder="Choisissez un appartement"
+                  optionFilterProp="children"
+                  onChange={(e) => onChange(e)}
+                  filterOption={(input, option) =>
+                    option.children
+                      .toLowerCase()
+                      .indexOf(input.toLowerCase()) >= 0
+                  }
+                >
+                  {apartmentsLoaded &&
+                    apartments.map((apart) => {
+                      return (
+                        <Option key={apart.id} value={apart.name}>
+                          {apart.name}
+                        </Option>
+                      );
+                    })}
+                </Select>
               </Form.Item>
 
               <Form.Item wrapperCol={formLayout}>

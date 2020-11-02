@@ -9,6 +9,7 @@ import {
   Empty,
   Row,
   Col,
+  message,
 } from "antd";
 import React, { useEffect, useState } from "react";
 import {
@@ -22,11 +23,12 @@ import {
 import { v4 as uuidv4 } from "uuid";
 
 import "./Form.less";
-import { Link, withRouter } from "react-router-dom";
+import { Link, useHistory, withRouter } from "react-router-dom";
 import api from "../../services/api";
 import layout from "../../constants/layout";
 
 const ApartmentsForm = ({ match }) => {
+  const history = useHistory();
   const [form] = Form.useForm();
   const initialValues = { name: "", multiple: false };
   const [apartment, setApartment] = useState(null);
@@ -46,15 +48,31 @@ const ApartmentsForm = ({ match }) => {
   }, [apartmentLoaded, match]);
 
   const onFormFinish = (values) => {
-    console.log("onFormFinish(), values:", values);
-    console.log("onFormFinish(), rooms:", rooms);
+    const newApartment = {
+      ...values,
+      rooms: rooms.map((r) => ({
+        number: r.number,
+        area: r.area,
+        price: r.price,
+      })),
+    };
+
+    api.create("apartment", newApartment).then((response) => {
+      console.log("response", response);
+      if (response.status === 201) {
+        message.success("Votre appartement à été enregistré");
+        history.push("/apartments");
+      }
+    });
+
+    console.log("newApartment", newApartment);
     // check that appartment has one room at least
   };
 
   // ------- rooms management -------
   const [rooms, setRooms] = useState([
-    { number: "1", area: "65m2", price: "300e", key: uuidv4() },
-    { number: "2", area: "65m2", price: "300e", key: uuidv4() },
+    { number: "1", area: "65m2", price: "500", key: uuidv4() },
+    { number: "2", area: "45m2", price: "300", key: uuidv4() },
   ]);
   const [roomsForm] = Form.useForm();
   const [editingKey, setEditingKey] = useState("");
@@ -71,13 +89,12 @@ const ApartmentsForm = ({ match }) => {
     children,
     ...restProps
   }) => {
-    const inputNode = dataIndex === "valid" ? <Checkbox /> : <Input />;
+    const inputNode = <Input />;
     return (
       <td {...restProps}>
         {editing ? (
           <Form.Item
             name={dataIndex}
-            {...(dataIndex === "valid" ? { valuePropName: "checked" } : {})}
             style={{
               margin: 0,
             }}
