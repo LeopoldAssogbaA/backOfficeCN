@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, withRouter } from "react-router-dom";
 import { RollbackOutlined, SaveOutlined } from "@ant-design/icons";
-import { Input, Form, Button } from "antd";
+import { Input, Form, Button, Row, Col } from "antd";
 
 import "./Form.less";
 import api from "../../services/api";
+import layout from "../../constants/layout";
 
 const RoomsForm = ({ match }) => {
   const history = useHistory();
@@ -59,95 +60,99 @@ const RoomsForm = ({ match }) => {
           {match.params.id !== undefined ? "Edition" : "Création"} d'une chambre
         </h2>
       </div>
-      <div className="formContainer">
-        <Form
-          {...formLayout}
-          initialValues={initialValues}
-          form={form}
-          onFinish={onFormFinish}
-        >
-          <Form.Item label="Numéro" name="number">
-            <Input placeholder="Numéro" type="text" />
-          </Form.Item>
-          {/* TODO: edit validators */}
-          <Form.Item
-            label="Emplacement"
-            name="area"
-            rules={[
-              {
-                required: true,
-                message: "Saisissez une surface",
-              },
-              {
-                min: 5,
-                message: "Votre une surface est trop petite",
-              },
-            ]}
-          >
-            <Input placeholder="Emplacement" type="text" />
-          </Form.Item>
-          <Form.Item
-            label="Emplacement"
-            name="area"
-            rules={[
-              {
-                required: true,
-                message: "Saisissez une surface",
-              },
-              {
-                min: 5,
-                message: "Votre une surface est trop petite",
-              },
-            ]}
-          >
-            <Input placeholder="Emplacement" type="text" />
-          </Form.Item>
-          <Form.Item
-            label="Prix"
-            name="price"
-            rules={[
-              {
-                required: true,
-                message: "Saisissez un prix",
-              },
-              {
-                min: 5,
-                message: "Votre prix est trop bas",
-              },
-            ]}
-          >
-            <Input placeholder="Prix" type="text" />
-          </Form.Item>
-          {/* TODO: replace by Select */}
-          <Form.Item
-            label="Appartement"
-            name="apartment"
-            rules={[
-              {
-                required: true,
-                message: "Choisissez un appartement",
-              },
-            ]}
-          >
-            <Input placeholder="Appartement" type="text" />
-          </Form.Item>
-
-          <Form.Item wrapperCol={formLayout}>
-            <Button
-              type="primary"
-              icon={<SaveOutlined />}
-              onClick={() => form.submit()}
+      <Row>
+        <Col {...layout}>
+          <div className="formContainer">
+            <Form
+              {...formLayout}
+              initialValues={initialValues}
+              form={form}
+              onFinish={onFormFinish}
             >
-              {match.params.id !== undefined ? "Enregister" : "Créer"}
-            </Button>
-            <Button
-              type="default"
-              icon={<RollbackOutlined />}
-              onClick={() => history.push("/rooms")}
-            />
-          </Form.Item>
-        </Form>
-      </div>
+              <Form.Item label="Numéro" name="number">
+                <Input placeholder="Numéro" type="text" />
+              </Form.Item>
+              {/* TODO: edit validators */}
+              <Form.Item
+                label="Emplacement"
+                name="area"
+                rules={[
+                  {
+                    required: true,
+                    message: "Saisissez une surface",
+                  },
+                  {
+                    min: 5,
+                    message: "Votre une surface est trop petite",
+                  },
+                ]}
+              >
+                <Input placeholder="Emplacement" type="text" />
+              </Form.Item>
+              <Form.Item
+                label="Emplacement"
+                name="area"
+                rules={[
+                  {
+                    required: true,
+                    message: "Saisissez une surface",
+                  },
+                  {
+                    min: 5,
+                    message: "Votre une surface est trop petite",
+                  },
+                ]}
+              >
+                <Input placeholder="Emplacement" type="text" />
+              </Form.Item>
+              <Form.Item
+                label="Prix"
+                name="price"
+                rules={[
+                  {
+                    required: true,
+                    message: "Saisissez un prix",
+                  },
+                  {
+                    min: 5,
+                    message: "Votre prix est trop bas",
+                  },
+                ]}
+              >
+                <Input placeholder="Prix" type="text" />
+              </Form.Item>
+              {/* TODO: replace by Select */}
+              <Form.Item
+                label="Appartement"
+                name="apartment"
+                rules={[
+                  {
+                    required: true,
+                    message: "Choisissez un appartement",
+                  },
+                ]}
+              >
+                <Input placeholder="Appartement" type="text" />
+              </Form.Item>
+
+              <Form.Item wrapperCol={formLayout}>
+                <Button
+                  type="primary"
+                  icon={<SaveOutlined />}
+                  onClick={() => form.submit()}
+                >
+                  {match.params.id !== undefined ? "Enregister" : "Créer"}
+                </Button>
+                <Button
+                  type="default"
+                  icon={<RollbackOutlined />}
+                  onClick={() => history.push("/rooms")}
+                />
+              </Form.Item>
+            </Form>
+          </div>
+        </Col>
+      </Row>
     </div>
   );
 };

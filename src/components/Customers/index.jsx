@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Button, message, Popconfirm, Space, Table } from "antd";
+import { Button, Col, message, Popconfirm, Row, Space, Table } from "antd";
 
 import "./index.less";
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  InfoCircleOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import api from "../../services/api";
 import { Link, useHistory } from "react-router-dom";
+import layout from "../../constants/layout";
 
 const Customers = () => {
   const history = useHistory();
@@ -79,6 +85,10 @@ const Customers = () => {
       render: (text, record) => (
         <Space size="small">
           <Button
+            icon={<InfoCircleOutlined />}
+            onClick={() => history.push(`/customers/details/${record.id}`)}
+          />
+          <Button
             icon={<EditOutlined />}
             onClick={() => history.push(`customers/edit/${record.id}`)}
           />
@@ -121,16 +131,20 @@ const Customers = () => {
           </Link>
         </div>
       </div>
-      <div className="tableContainer">
-        <Table
-          loading={!customersLoaded}
-          columns={columns}
-          dataSource={customers}
-          bordered
-          pagination={false}
-          // pagination={{ defaultPageSize: 8, total: customers.length }}
-        />
-      </div>
+      <Row>
+        <Col {...layout}>
+          <div className="tableContainer">
+            <Table
+              loading={!customersLoaded}
+              columns={columns}
+              dataSource={customers}
+              bordered
+              pagination={false}
+              // pagination={{ defaultPageSize: 8, total: customers.length }}
+            />
+          </div>
+        </Col>
+      </Row>
     </div>
   );
 };

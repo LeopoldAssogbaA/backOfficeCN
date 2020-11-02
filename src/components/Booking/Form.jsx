@@ -1,9 +1,10 @@
 import { useHistory, withRouter } from "react-router-dom";
 import React from "react";
-import { Input, Form, Button } from "antd";
+import { Input, Form, Button, Row, Col } from "antd";
 
 import "./Form.less";
 import { RollbackOutlined, SaveOutlined } from "@ant-design/icons";
+import layout from "../../constants/layout";
 
 const BookingForm = ({ match }) => {
   const history = useHistory();
@@ -39,50 +40,54 @@ const BookingForm = ({ match }) => {
           réservation
         </h2>
       </div>
-      <div className="formContainer">
-        <Form
-          {...formLayout}
-          initialValues={initialValues}
-          form={form}
-          onFinish={onFormFinish}
-        >
-          <Form.Item label="Client" name="clientId" value="clientId">
-            <Input placeholder="Client" />
-          </Form.Item>
-
-          <Form.Item
-            label="Chambre"
-            name="roomID"
-            rules={[
-              {
-                required: true,
-                message: "Saisissez un titre",
-              },
-              {
-                min: 5,
-                message: "Votre titre est trop court",
-              },
-            ]}
-          >
-            <Input placeholder="Chambre" />
-          </Form.Item>
-
-          <Form.Item wrapperCol={formLayout}>
-            <Button
-              type="primary"
-              icon={<SaveOutlined />}
-              onClick={() => form.submit()}
+      <Row>
+        <Col {...layout}>
+          <div className="formContainer">
+            <Form
+              {...formLayout}
+              initialValues={initialValues}
+              form={form}
+              onFinish={onFormFinish}
             >
-              {match.params.id !== undefined ? "Enregister" : "Créer"}
-            </Button>
-            <Button
-              type="default"
-              icon={<RollbackOutlined />}
-              onClick={() => history.push("/booking")}
-            />
-          </Form.Item>
-        </Form>
-      </div>
+              <Form.Item label="Client" name="clientId" value="clientId">
+                <Input placeholder="Client" />
+              </Form.Item>
+
+              <Form.Item
+                label="Chambre"
+                name="roomID"
+                rules={[
+                  {
+                    required: true,
+                    message: "Saisissez un titre",
+                  },
+                  {
+                    min: 5,
+                    message: "Votre titre est trop court",
+                  },
+                ]}
+              >
+                <Input placeholder="Chambre" />
+              </Form.Item>
+
+              <Form.Item wrapperCol={formLayout}>
+                <Button
+                  type="primary"
+                  icon={<SaveOutlined />}
+                  onClick={() => form.submit()}
+                >
+                  {match.params.id !== undefined ? "Enregister" : "Créer"}
+                </Button>
+                <Button
+                  type="default"
+                  icon={<RollbackOutlined />}
+                  onClick={() => history.push("/booking")}
+                />
+              </Form.Item>
+            </Form>
+          </div>
+        </Col>
+      </Row>
     </div>
   );
 };

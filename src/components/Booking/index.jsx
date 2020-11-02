@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Button, message, Popconfirm, Space, Table } from "antd";
+import { Button, Col, message, Popconfirm, Row, Space, Table } from "antd";
 import { Link, useHistory } from "react-router-dom";
 
 import api from "../../services/api";
 
 import "./index.less";
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  // EditOutlined,
+  InfoCircleOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
+import layout from "../../constants/layout";
 
 const Booking = () => {
   const history = useHistory();
@@ -46,15 +52,20 @@ const Booking = () => {
   const columns = [
     {
       title: "Client",
-      dataIndex: "name",
-      key: "name",
-      render: (text) => text,
+      dataIndex: "client",
+      key: "client",
+      render: (client) => client.firstName + " " + client.lastName,
     },
     {
       title: "Chambre",
-      key: "bookings",
-      dataIndex: "bookings",
-      render: (text) => text,
+      key: "room",
+      dataIndex: "room",
+      render: (room) => (
+        <>
+          <h4>{room.apartment.name}</h4>
+          <h5>Emplacement: {room.area}</h5>
+        </>
+      ),
     },
     {
       title: "Action",
@@ -62,9 +73,13 @@ const Booking = () => {
       render: (text, record) => (
         <Space size="small">
           <Button
+            icon={<InfoCircleOutlined />}
+            onClick={() => history.push(`/booking/details/${record.id}`)}
+          />
+          {/* <Button
             icon={<EditOutlined />}
             onClick={() => history.push(`booking/edit/${record.id}`)}
-          />
+          /> */}
           <Popconfirm
             title={`Êtes-vous sûr de vouloir supprimer l'appartement « ${record.name} » ?`}
             onConfirm={() => deleteBooking(record.id)}
@@ -92,6 +107,8 @@ const Booking = () => {
       });
   };
 
+  console.log("bookings", bookings);
+
   return (
     <div className="bookingContainer container">
       <div className="titleContainer">
@@ -104,16 +121,20 @@ const Booking = () => {
           </Link>
         </div>
       </div>
-      <div className="tableContainer">
-        <Table
-          loading={!bookingsLoaded}
-          columns={columns}
-          dataSource={bookings}
-          bordered
-          pagination={false}
-          // pagination={{ defaultPageSize: 10, total: 13 }}
-        />
-      </div>
+      <Row>
+        <Col {...layout}>
+          <div className="tableContainer">
+            <Table
+              loading={!bookingsLoaded}
+              columns={columns}
+              dataSource={bookings}
+              bordered
+              pagination={false}
+              // pagination={{ defaultPageSize: 10, total: 13 }}
+            />
+          </div>
+        </Col>
+      </Row>
     </div>
   );
 };

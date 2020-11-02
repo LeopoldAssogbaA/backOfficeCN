@@ -1,12 +1,16 @@
 import Apartments from "../components/Apartments";
 import ApartmentsForm from "../components/Apartments/Form";
+import ApartmentsDetails from "../components/Apartments/Details";
 import Booking from "../components/Booking";
 import BookingForm from "../components/Booking/Form";
+import BookingDetails from "../components/Booking/Details";
 import Customers from "../components/Customers";
 import CustomerForm from "../components/Customers/Form";
+import CustomersDetails from "../components/Customers/Details";
 import Home from "../components/Home";
 import Rooms from "../components/Rooms";
 import RoomsForm from "../components/Rooms/Form";
+import RoomsDetails from "../components/Rooms/Details";
 
 const routes = [
   {
@@ -34,6 +38,12 @@ const routes = [
     component: () => <ApartmentsForm />,
   },
   {
+    path: "/apartments/details/:id",
+    exact: false,
+    name: "Appartements",
+    component: () => <ApartmentsDetails />,
+  },
+  {
     path: "/rooms",
     exact: true,
     name: "Chambres",
@@ -50,6 +60,12 @@ const routes = [
     exact: false,
     name: "Chambres",
     component: () => <RoomsForm />,
+  },
+  {
+    path: "/rooms/details/:id",
+    exact: false,
+    name: "Chambres",
+    component: () => <RoomsDetails />,
   },
   {
     path: "/customers",
@@ -70,6 +86,12 @@ const routes = [
     component: () => <CustomerForm />,
   },
   {
+    path: "/customers/details/:id",
+    exact: false,
+    name: "Clients",
+    component: () => <CustomersDetails />,
+  },
+  {
     path: "/booking",
     exact: true,
     name: "Réservations",
@@ -86,6 +108,12 @@ const routes = [
     exact: false,
     name: "Réservations",
     component: () => <BookingForm />,
+  },
+  {
+    path: "/booking/details/:id",
+    exact: false,
+    name: "Réservations",
+    component: () => <BookingDetails />,
   },
 ];
 

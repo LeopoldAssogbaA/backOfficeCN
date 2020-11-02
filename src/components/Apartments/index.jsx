@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Button, message, Popconfirm, Space, Table, Tag } from "antd";
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { Button, Col, message, Popconfirm, Row, Space, Table, Tag } from "antd";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  InfoCircleOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import { Link, useHistory } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 
 import api from "../../services/api";
 
 import "./index.less";
+import layout from "../../constants/layout";
 
 const Apartments = () => {
   const history = useHistory();
@@ -80,9 +86,13 @@ const Apartments = () => {
       render: (text, record) => (
         <Space size="small">
           <Button
+            icon={<InfoCircleOutlined />}
+            onClick={() => history.push(`apartments/details/${record.id}`)}
+          />
+          {/* <Button
             icon={<EditOutlined />}
             onClick={() => history.push(`apartments/edit/${record.id}`)}
-          />
+          /> */}
           <Popconfirm
             title={`Êtes-vous sûr de vouloir supprimer l'appartement « ${record.name} » ?`}
             onConfirm={() => deleteApartment(record.id)}
@@ -123,16 +133,20 @@ const Apartments = () => {
           </Link>
         </div>
       </div>
-      <div className="tableContainer">
-        <Table
-          loading={!apartmentsLoaded}
-          columns={columns}
-          dataSource={apartments.map((a, i) => ({ ...a, key: uuidv4() }))}
-          bordered
-          pagination={false}
-          // pagination={{ defaultPageSize: 10, total: 13 }}
-        />
-      </div>
+      <Row>
+        <Col {...layout}>
+          <div className="tableContainer">
+            <Table
+              loading={!apartmentsLoaded}
+              columns={columns}
+              dataSource={apartments.map((a, i) => ({ ...a, key: uuidv4() }))}
+              bordered
+              pagination={false}
+              // pagination={{ defaultPageSize: 10, total: 13 }}
+            />
+          </div>
+        </Col>
+      </Row>
     </div>
   );
 };

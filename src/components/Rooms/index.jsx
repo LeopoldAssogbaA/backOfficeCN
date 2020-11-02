@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { Button, message, Popconfirm, Space, Table } from "antd";
+import { Button, Col, message, Popconfirm, Row, Space, Table } from "antd";
 import { v4 as uuidv4 } from "uuid";
 
 import api from "../../services/api";
 
 import "./index.less";
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  InfoCircleOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
+import layout from "../../constants/layout";
 
 const Rooms = () => {
   const history = useHistory();
@@ -51,12 +57,6 @@ const Rooms = () => {
       key: "apartment",
       render: (apartment) => apartment.name,
     },
-    // {
-    //   title: "Nombre",
-    //   dataIndex: "number",
-    //   key: "number",
-    //   render: (text) => text,
-    // },
     {
       title: "Emplacement",
       dataIndex: "area",
@@ -75,8 +75,12 @@ const Rooms = () => {
       render: (text, record) => (
         <Space size="small">
           <Button
+            icon={<InfoCircleOutlined />}
+            onClick={() => history.push(`/rooms/details/${record.id}`)}
+          />
+          <Button
             icon={<EditOutlined />}
-            onClick={() => history.push(`rooms/edit/${record.id}`)}
+            onClick={() => history.push(`/rooms/edit/${record.id}`)}
           />
           <Popconfirm
             title={`Êtes-vous sûr de vouloir supprimer l'appartement « ${record.name} » ?`}
@@ -117,19 +121,23 @@ const Rooms = () => {
           </Link>
         </div>
       </div>
-      <div className="tableContainer">
-        <Table
-          loading={!roomsLoaded}
-          columns={columns}
-          dataSource={rooms.map((r) => ({ ...r, key: uuidv4() }))}
-          bordered
-          // pagination={false}
-          pagination={{
-            defaultPageSize: 8,
-            total: roomsLoaded && rooms.length,
-          }}
-        />
-      </div>
+      <Row>
+        <Col {...layout}>
+          <div className="tableContainer">
+            <Table
+              loading={!roomsLoaded}
+              columns={columns}
+              dataSource={rooms.map((r) => ({ ...r, key: uuidv4() }))}
+              bordered
+              // pagination={false}
+              pagination={{
+                defaultPageSize: 8,
+                total: roomsLoaded && rooms.length,
+              }}
+            />
+          </div>
+        </Col>
+      </Row>
     </div>
   );
 };

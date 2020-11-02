@@ -7,6 +7,8 @@ import {
   Table,
   Form,
   Empty,
+  Row,
+  Col,
 } from "antd";
 import React, { useEffect, useState } from "react";
 import {
@@ -22,6 +24,7 @@ import { v4 as uuidv4 } from "uuid";
 import "./Form.less";
 import { Link, withRouter } from "react-router-dom";
 import api from "../../services/api";
+import layout from "../../constants/layout";
 
 const ApartmentsForm = ({ match }) => {
   const [form] = Form.useForm();
@@ -257,92 +260,98 @@ const ApartmentsForm = ({ match }) => {
           appartement
         </h2>
       </div>
-      <div className="formContainer">
-        <Form
-          {...formLayout}
-          initialValues={initialValues}
-          form={form}
-          onFinish={onFormFinish}
-        >
-          <Form.Item label="Numéro" name="number" value="number">
-            <Input placeholder="Numéro" value={2} />
-          </Form.Item>
-
-          <Form.Item
-            label="Nom"
-            name="name"
-            rules={[
-              {
-                required: true,
-                message: "Saisissez un titre",
-              },
-              {
-                min: 5,
-                message: "Votre titre est trop court",
-              },
-            ]}
-          >
-            <Input placeholder="Nom de l'appartement" />
-          </Form.Item>
-        </Form>
-        <Form form={roomsForm} {...formLayout}>
-          <Form.Item label="Chambres">
-            <Table
-              loading={match.params.id === undefined ? false : !apartmentLoaded}
-              components={{
-                body: {
-                  cell: EditableCell,
-                },
-              }}
-              size="small"
-              bordered
-              dataSource={rooms}
-              columns={mergedColumns}
-              rowClassName="editable-row"
-              pagination={{
-                style: { visibility: "hidden" },
-                hideOnSinglePage: true,
-              }}
-              locale={{
-                emptyText: (
-                  <Empty
-                    description={<span>Aucune chambre</span>}
-                    image={Empty.PRESENTED_IMAGE_SIMPLE}
-                  ></Empty>
-                ),
-              }}
-            />
-            <Button
-              type="default"
-              icon={<PlusOutlined />}
-              onClick={() => roomAdd()}
+      <Row>
+        <Col {...layout}>
+          <div className="formContainer">
+            <Form
+              {...formLayout}
+              initialValues={initialValues}
+              form={form}
+              onFinish={onFormFinish}
             >
-              Ajouter une chambre
-            </Button>
-            {roomsError && (
-              <p className="ant-typography ant-typography-danger">
-                {roomsError}
-              </p>
-            )}
-          </Form.Item>
-        </Form>
-        <Form.Item wrapperCol={formLayout}>
-          <Button
-            type="primary"
-            icon={<SaveOutlined />}
-            onClick={() => form.submit()}
-          >
-            {match.params.id !== undefined ? "Enregister" : "Créer"}
-          </Button>
-          <Link to="/apartments">
-            <Button
-              type="default"
-              icon={<RollbackOutlined />}
-              onClick={() => {}}
-            />
-          </Link>
-        </Form.Item>
-      </div>
+              <Form.Item label="Numéro" name="number" value="number">
+                <Input placeholder="Numéro" value={2} />
+              </Form.Item>
+
+              <Form.Item
+                label="Nom"
+                name="name"
+                rules={[
+                  {
+                    required: true,
+                    message: "Saisissez un titre",
+                  },
+                  {
+                    min: 5,
+                    message: "Votre titre est trop court",
+                  },
+                ]}
+              >
+                <Input placeholder="Nom de l'appartement" />
+              </Form.Item>
+            </Form>
+            <Form form={roomsForm} {...formLayout}>
+              <Form.Item label="Chambres">
+                <Table
+                  loading={
+                    match.params.id === undefined ? false : !apartmentLoaded
+                  }
+                  components={{
+                    body: {
+                      cell: EditableCell,
+                    },
+                  }}
+                  size="small"
+                  bordered
+                  dataSource={rooms}
+                  columns={mergedColumns}
+                  rowClassName="editable-row"
+                  pagination={{
+                    style: { visibility: "hidden" },
+                    hideOnSinglePage: true,
+                  }}
+                  locale={{
+                    emptyText: (
+                      <Empty
+                        description={<span>Aucune chambre</span>}
+                        image={Empty.PRESENTED_IMAGE_SIMPLE}
+                      ></Empty>
+                    ),
+                  }}
+                />
+                <Button
+                  type="default"
+                  icon={<PlusOutlined />}
+                  onClick={() => roomAdd()}
+                >
+                  Ajouter une chambre
+                </Button>
+                {roomsError && (
+                  <p className="ant-typography ant-typography-danger">
+                    {roomsError}
+                  </p>
+                )}
+              </Form.Item>
+            </Form>
+            <Form.Item wrapperCol={formLayout}>
+              <Button
+                type="primary"
+                icon={<SaveOutlined />}
+                onClick={() => form.submit()}
+              >
+                {match.params.id !== undefined ? "Enregister" : "Créer"}
+              </Button>
+              <Link to="/apartments">
+                <Button
+                  type="default"
+                  icon={<RollbackOutlined />}
+                  onClick={() => {}}
+                />
+              </Link>
+            </Form.Item>
+          </div>
+        </Col>
+      </Row>
     </div>
   );
 };
