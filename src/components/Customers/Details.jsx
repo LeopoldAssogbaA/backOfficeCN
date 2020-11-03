@@ -6,6 +6,8 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import api from "../../services/api";
 
 import "./Details.less";
+import layout from "../../constants/layout";
+import { format } from "date-fns";
 
 const { Meta } = Card;
 
@@ -54,13 +56,18 @@ const CustomersDetails = ({ match }) => {
           </li>
         </ul>
         <Divider orientation="left">Réservations</Divider>
-        {customer.bookings.length < 0 ? (
-          "Réservation"
-        ) : (
+
+        {console.log("customer", customer.bookings)}
+        {customer.bookings.length === 0 ? (
           <Empty
             image={Empty.PRESENTED_IMAGE_SIMPLE}
             description={"Aucune réservations"}
           />
+        ) : (
+          <ul>
+            <li> {"Réservation: " + customer.bookings[0].room.area}</li>
+            <li> {"Prix: " + customer.bookings[0].room.price + " Euros"}</li>
+          </ul>
         )}
       </>
     );
@@ -81,13 +88,6 @@ const CustomersDetails = ({ match }) => {
       });
   };
 
-  const layout = {
-    xs: { span: 22, offset: 1 },
-    sm: { span: 18, offset: 3 },
-    md: { span: 20, offset: 2 },
-    lg: { span: 12, offset: 6 },
-    xl: { span: 12, offset: 6 },
-  };
   // console.log("match.params.id", match.params.id);
   return (
     <div className="customersDetailsContainer container">

@@ -21,10 +21,11 @@ class Api {
     update: (path, data) =>
       axios.put(`${APIURL}${path}`, data, {
         headers: {
-          "Access-Control-Allow-Headers": "Accept, Content-Type",
           Accept: "application/json",
-          "Access-Control-Allow-Origin": "*",
           "Content-Type": "application/json",
+          "Access-Allow-Credentials": "true",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Headers": "Accept, Content-Type",
           "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, OPTIONS",
           withCredentials: true,
         },
@@ -34,6 +35,7 @@ class Api {
       axios.delete(`${APIURL}${path}`, {
         headers: {
           Accept: "application/json",
+          "Access-Allow-Credentials": "true",
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Headers": "Accept, Content-Type",
           "Content-Type": "application/json",
