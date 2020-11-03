@@ -32,4 +32,7 @@ API: https://app-booking-christ.herokuapp.com/
 This application aims to manage different elements; apartments, rooms, customers and reservations.
 I chose to develop the app with React and to use the Ant-Design library for the interface.
 
+# Screenshot
+<img src="public/assets/screenshot.gif" alt="screenshot" />
+
 
