@@ -21,37 +21,16 @@ class Api {
     update: (path, data) =>
       axios.put(`${APIURL}${path}`, data, {
         headers: {
-          "Content-Type":
-            "application/json; text/html; charset=utf-8; text/plain",
-          Connection: "keep-alive",
-          "X-Powered-By": "Express",
           "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Headers":
-            "Origin, X-Requested-With, Content-Type, Accept",
-          "Access-Control-Allow-Methods":
-            "GET, HEAD , DELETE, PUT, OPTIONS, POST, CONNECTIONS",
-          "Access-Control-Request-Method": "PUT",
-          Host: "app-booking-christ.herokuapp.com",
-          "Cache-Control": "no-cache",
-          "Accept-Encoding": "gzip, deflate, br",
+          "Content-Type": "application/json",
         },
       }),
 
     delete: (path) =>
       axios.delete(`${APIURL}${path}`, {
         headers: {
-          Accept: "application/json, text/plain,*/*",
-          "Accept-Encoding": "gzip, deflate, br",
-          "Accept-Language": "fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3",
-          "Access-Control-Allow-Headers":
-            "Origin, X-Requested-With, Content-Type,Accept",
           "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods":
-            "GET, HEAD,DELETE,PUT,OPTIONS,POST,CONNECTION",
-          "Access-Control-Request-Method": "DELETE",
-          "Cache-Control": "no-cache",
-          Connection: "keep-alive",
-          Host: "app-booking-christ.herokuapp.com",
+          "Content-Type": "application/json",
         },
       }),
   };
