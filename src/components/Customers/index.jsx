@@ -33,7 +33,7 @@ const Customers = () => {
         .fetchCollection("client")
         .then((response) => {
           if (response && "data" in response && response.data.length !== 0) {
-            console.log("response.data", response);
+            // console.log("response.data", response);
             if (response.data.clients.length !== 0) {
               setCustomers(response.data.clients);
             } else {
@@ -43,7 +43,7 @@ const Customers = () => {
           }
         })
         .catch((e) => {
-          console.log("errors", e);
+          // console.log("errors", e);
         });
     }
   }, [customersLoaded]);
@@ -104,18 +104,18 @@ const Customers = () => {
   ];
 
   const deleteCustomer = (id) => {
-    console.log(id);
+    // console.log(id);
     api
       .delete("client", id)
       .then((response) => {
-        console.log("response delete", response);
+        // console.log("response delete", response);
         if (response) {
           message.success("l'appartement bien été supprimé");
         } else {
         }
       })
       .catch((e) => {
-        console.log("error delete", e);
+        // console.log("error delete", e);
         message.error(JSON.stringify("erreur", e));
       });
   };

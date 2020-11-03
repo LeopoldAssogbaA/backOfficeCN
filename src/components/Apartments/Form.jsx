@@ -57,20 +57,25 @@ const ApartmentsForm = ({ match }) => {
     };
 
     if (newApartment.rooms.length < 1) {
-      console.log("newApartment chambre insuffisantes", newApartment);
+      // console.log("newApartment chambre insuffisantes", newApartment);
       return message.error("Ajoutez au moins une chambre.");
     }
 
-    api.create("apartment", newApartment).then((response) => {
-      console.log("response", response);
-      if (response.status === 201) {
-        message.success("Votre appartement à été enregistré");
-        history.push("/apartments");
-      }
-    });
+    api
+      .create("apartment", newApartment)
+      .then((response) => {
+        // console.log("response", response);
+        if (response.status === 201) {
+          message.success("Votre appartement à été enregistré");
+          history.push("/apartments");
+        }
+      })
+      .catch((e) => {
+        message.error("Une erreur est survenye");
+        message.error(JSON.stringify(e));
+      });
 
-    console.log("newApartment", newApartment);
-    // TODO: check that appartment has one room at least
+    // console.log("newApartment", newApartment);
   };
 
   // ------- rooms management -------
@@ -149,7 +154,7 @@ const ApartmentsForm = ({ match }) => {
   };
 
   const roomEditCancel = (key) => {
-    console.log("roomEditCancel, key:", key);
+    // console.log("roomEditCancel, key:", key);
     if (key === "new") {
       const roomsUpdated = rooms.filter((room) => room.key !== key);
       setRooms((rooms) => [...roomsUpdated]);
@@ -164,11 +169,11 @@ const ApartmentsForm = ({ match }) => {
   };
 
   const roomEditSave = async (key) => {
-    console.log(`roomEditSave() key=${key}`);
+    // console.log(`roomEditSave() key=${key}`);
 
     try {
       const row = await roomsForm.getFieldsValue();
-      console.log("row", row);
+      // console.log("row", row);
 
       if (row.number === undefined || row.number === "") {
         return message.warning("saisissez un numéro");
@@ -187,7 +192,7 @@ const ApartmentsForm = ({ match }) => {
         row.key = uuidv4();
       }
 
-      console.log("roomEditSave() row:", row);
+      // console.log("roomEditSave() row:", row);
       if (index > -1) {
         const item = newData[index];
         newData.splice(index, 1, { ...item, ...row });
@@ -199,7 +204,7 @@ const ApartmentsForm = ({ match }) => {
         setEditingKey();
       }
     } catch (errInfo) {
-      console.log("Validate Failed:", errInfo);
+      // console.log("Validate Failed:", errInfo);
     }
   };
 
@@ -280,7 +285,7 @@ const ApartmentsForm = ({ match }) => {
       return formItemLayout;
     }, {});
 
-  console.log("match.params.id", match.params.id);
+  // console.log("match.params.id", match.params.id);
   return (
     <div className="roomsFormContainer container">
       <div className="titleContainer">

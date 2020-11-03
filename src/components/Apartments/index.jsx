@@ -34,7 +34,7 @@ const Apartments = () => {
         .fetchCollection("apartment")
         .then((response) => {
           if (response && "data" in response && response.data.length !== 0) {
-            console.log("response.data", response);
+            // console.log("response.data", response);
             if (response.data.apartments.length !== 0) {
               setApartments(response.data.apartments);
             } else {
@@ -44,7 +44,9 @@ const Apartments = () => {
           }
         })
         .catch((e) => {
-          console.log("errors", e);
+          // console.log("errors", e);
+          message.error("Une erreur est survenue");
+          message.error(JSON.stringify(e));
         });
     }
   }, [apartmentsLoaded]);
@@ -107,15 +109,16 @@ const Apartments = () => {
     api
       .delete("apartments", id)
       .then((response) => {
-        console.log("response delete", response);
+        // console.log("response delete", response);
         if (response) {
           message.success("l'appartement bien été supprimé");
         } else {
         }
       })
       .catch((e) => {
-        console.log("error delete", e);
+        // console.log("error delete", e);
         message.error(JSON.stringify("erreur", e));
+        message.error("Une erreur est survenue");
       });
   };
 

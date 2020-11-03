@@ -6,6 +6,7 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import api from "../../services/api";
 
 import "./Details.less";
+import layout from "../../constants/layout";
 
 const { Meta } = Card;
 
@@ -18,7 +19,7 @@ const RoomsDetails = ({ match }) => {
     const id = match.params.id;
     if (!roomLoaded && id !== undefined) {
       api.fetch("room", id).then((response) => {
-        console.log("response fetch room", response.data.room);
+        // console.log("response fetch room", response.data.room);
         setRoom(response.data.room);
         setRoomLoaded(true);
       });
@@ -38,26 +39,19 @@ const RoomsDetails = ({ match }) => {
     api
       .delete("room", id)
       .then((response) => {
-        console.log("response delete", response);
+        // console.log("response delete", response);
         if (response) {
           message.success("l'appartement bien été supprimé");
         } else {
         }
       })
       .catch((e) => {
-        console.log("error delete", e);
+        // console.log("error delete", e);
         message.error(JSON.stringify("erreur", e));
       });
   };
 
-  const layout = {
-    xs: { span: 22, offset: 1 },
-    sm: { span: 18, offset: 3 },
-    md: { span: 20, offset: 2 },
-    lg: { span: 12, offset: 6 },
-    xl: { span: 12, offset: 6 },
-  };
-  console.log("match.params.id", match.params.id);
+  // console.log("match.params.id", match.params.id);
   return (
     <div className="apartmentsDetailsContainer container">
       <div className="titleContainer">

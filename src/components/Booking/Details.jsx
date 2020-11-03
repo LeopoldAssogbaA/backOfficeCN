@@ -19,7 +19,7 @@ const BookingDetails = ({ match }) => {
     const id = match.params.id;
     if (!bookingLoaded && id !== undefined) {
       api.fetch("booking", id).then((response) => {
-        console.log("response fetch booking", response.data.booking);
+        // console.log("response fetch booking", response.data.booking);
         setBooking(response.data.booking);
         setBookingLoaded(true);
       });
@@ -46,14 +46,15 @@ const BookingDetails = ({ match }) => {
     api
       .delete("booking", id)
       .then((response) => {
-        console.log("response delete", response);
+        // console.log("response delete", response);
         if (response) {
           message.success("la réservation bien été supprimé");
         } else {
         }
       })
       .catch((e) => {
-        console.log("error delete", e);
+        // console.log("error delete", e);
+        message.error("Une erreur est survenue");
         message.error(JSON.stringify("erreur", e));
       });
   };
@@ -65,7 +66,7 @@ const BookingDetails = ({ match }) => {
     lg: { span: 12, offset: 6 },
     xl: { span: 12, offset: 6 },
   };
-  console.log("match.params.id", match.params.id);
+  // console.log("match.params.id", match.params.id);
   return (
     <div className="bookingDetailsContaner container">
       <div className="titleContainer">

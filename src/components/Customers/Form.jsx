@@ -30,10 +30,10 @@ const CustomersForm = ({ match }) => {
     const id = match.params.id;
     if (!customerLoaded && id !== undefined) {
       api.fetch("client", id).then((response) => {
-        console.log(
-          "response fetch customer",
-          moment(response.data.client.birthDate, "YYYY-MM-DD")
-        );
+        // console.log(
+        //   "response fetch customer",
+        //   moment(response.data.client.birthDate, "YYYY-MM-DD")
+        // );
         setCustomer(response.data.client);
         setCustomerLoaded(true);
         form.setFieldsValue({
@@ -56,7 +56,7 @@ const CustomersForm = ({ match }) => {
       phone: values.prefix + values.phone,
       birthDate: moment(values.birthDate).format("YYYY-MM-DD"),
     };
-    console.log("onFormFinish(), newCustomer:", newCustomer);
+    // console.log("onFormFinish(), newCustomer:", newCustomer);
 
     if (id === undefined) {
       api
@@ -64,12 +64,12 @@ const CustomersForm = ({ match }) => {
         .then((res) => {
           if (res.status === 201) {
             message.success("Le nouvel utilisateur a été enregistré.");
-            console.log("res", res);
+            // console.log("res", res);
             history.push("/customers");
           }
         })
         .catch((e) => {
-          console.log("error post request", e);
+          // console.log("error post request", e);
           message.error("Une erreur est survenue.");
           message.error(JSON.stringify(e));
         });
@@ -79,12 +79,12 @@ const CustomersForm = ({ match }) => {
         .then((res) => {
           if (res.status === 201) {
             message.success("L'utilisateur a été modifé.");
-            console.log("res", res);
+            // console.log("res", res);
             history.push("/customers");
           }
         })
         .catch((e) => {
-          console.log("error put request", e);
+          // console.log("error put request", e);
           message.error("Une erreur est survenue.");
           message.error(JSON.stringify(e));
         });
@@ -101,7 +101,7 @@ const CustomersForm = ({ match }) => {
     }, {});
 
   function onChange(date, dateString) {
-    console.log(date, dateString);
+    // console.log(date, dateString);
     form.setFieldsValue("birthDate", dateString);
   }
 

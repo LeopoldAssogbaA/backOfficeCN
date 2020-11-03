@@ -23,7 +23,7 @@ const RoomsForm = ({ match }) => {
   useEffect(() => {
     if (!apartmentsLoaded) {
       api.fetchCollection("apartment").then((response) => {
-        console.log("response fetch apartment", response);
+        // console.log("response fetch apartment", response);
         setApartments(response.data.apartments);
         setApartmentsLoaded(true);
       });
@@ -34,7 +34,7 @@ const RoomsForm = ({ match }) => {
     const id = match.params.id;
     if (!roomLoaded && id !== undefined) {
       api.fetch("room", id).then((response) => {
-        console.log("response fetch room", response);
+        // console.log("response fetch room", response);
         setRoom(response.data.room);
         form.setFieldsValue({
           number: response.data.room.number,
@@ -48,7 +48,7 @@ const RoomsForm = ({ match }) => {
   }, [roomLoaded, match, form]);
 
   const onFormFinish = (values) => {
-    console.log("onFormFinish(), values:", values);
+    // console.log("onFormFinish(), values:", values);
     const id = match.params.id;
     const apartmentId = apartments.find((a) => a.name === values.apartment).id;
     const newRoom = {
@@ -57,7 +57,7 @@ const RoomsForm = ({ match }) => {
       price: values.price,
       apartmentId,
     };
-    console.log("newRoom", newRoom);
+    // console.log("newRoom", newRoom);
 
     if (id === undefined) {
       api.create("room", newRoom).then((response) => {
@@ -76,7 +76,7 @@ const RoomsForm = ({ match }) => {
           }
         })
         .catch((e) => {
-          console.log("error put request", e);
+          // console.log("error put request", e);
           message.error("Une erreur est survenue.");
           message.error(JSON.stringify(e));
         });
@@ -84,10 +84,10 @@ const RoomsForm = ({ match }) => {
   };
 
   function onChange(value) {
-    console.log(`selected ${value}`);
+    // console.log(`selected ${value}`);
   }
 
-  console.log("initialValues", initialValues);
+  // console.log("initialValues", initialValues);
 
   const getFormItemLayout = () =>
     Object.keys(layout.form.wrapperCol).reduce((formItemLayout, breakpoint) => {

@@ -18,7 +18,7 @@ const CustomersDetails = ({ match }) => {
     const id = match.params.id;
     if (!customerLoaded && id !== undefined) {
       api.fetch("client", id).then((response) => {
-        console.log("response fetch customer", response.data.client);
+        // console.log("response fetch customer", response.data.client);
         setCustomer(response.data.client);
         setCustomerLoaded(true);
       });
@@ -69,14 +69,14 @@ const CustomersDetails = ({ match }) => {
     api
       .delete("customer", id)
       .then((response) => {
-        console.log("response delete", response);
+        // console.log("response delete", response);
         if (response) {
           message.success("l'appartement bien été supprimé");
         } else {
         }
       })
       .catch((e) => {
-        console.log("error delete", e);
+        // console.log("error delete", e);
         message.error(JSON.stringify("erreur", e));
       });
   };
@@ -88,7 +88,7 @@ const CustomersDetails = ({ match }) => {
     lg: { span: 12, offset: 6 },
     xl: { span: 12, offset: 6 },
   };
-  console.log("match.params.id", match.params.id);
+  // console.log("match.params.id", match.params.id);
   return (
     <div className="customersDetailsContainer container">
       <div className="titleContainer">

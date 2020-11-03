@@ -4,9 +4,9 @@ import { Card, Row, Col, Divider, List, Popconfirm, message } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 
 import api from "../../services/api";
+import layout from "../../constants/layout";
 
 import "./Details.less";
-import layout from "../../constants/layout";
 
 const { Meta } = Card;
 
@@ -15,13 +15,13 @@ const ApartmentsDetails = ({ match }) => {
   const [apartmentsLoaded, setApartmentsLoaded] = useState(false);
   const currentApart =
     apartmentsLoaded && apartments.find((a) => a.id === match.params.id);
-  console.log("currentApart", currentApart);
+  // console.log("currentApart", currentApart);
 
   useEffect(() => {
     const id = match.params.id;
     if (!apartmentsLoaded && id !== undefined) {
       api.fetchCollection("apartment").then((response) => {
-        console.log("response fetch apartment", response);
+        // console.log("response fetch apartment", response);
         setApartments(response.data.apartments);
         setApartmentsLoaded(true);
       });
@@ -60,19 +60,19 @@ const ApartmentsDetails = ({ match }) => {
     api
       .delete("apartments", id)
       .then((response) => {
-        console.log("response delete", response);
+        // console.log("response delete", response);
         if (response) {
           message.success("l'appartement bien été supprimé");
         } else {
         }
       })
       .catch((e) => {
-        console.log("error delete", e);
+        // console.log("error delete", e);
         message.error(JSON.stringify("erreur", e));
       });
   };
 
-  console.log("match.params.id", match.params.id);
+  // console.log("match.params.id", match.params.id);
   return (
     <div className="apartmentsDetailsContainer container">
       <div className="titleContainer">

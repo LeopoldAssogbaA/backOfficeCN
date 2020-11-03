@@ -34,7 +34,7 @@ const Booking = () => {
         .fetchCollection("booking")
         .then((response) => {
           if (response && "data" in response && response.data.length !== 0) {
-            console.log("response.data", response);
+            // console.log("response.data", response);
             if (response.data.bookings.length !== 0) {
               setBookings(response.data.bookings);
             } else {
@@ -44,7 +44,9 @@ const Booking = () => {
           }
         })
         .catch((e) => {
-          console.log("errors", e);
+          // console.log("errors", e);
+          message.error("Une erreur est survenue");
+          message.error(JSON.stringify(e));
         });
     }
   }, [bookingsLoaded]);
@@ -95,19 +97,20 @@ const Booking = () => {
     api
       .delete("room", id)
       .then((response) => {
-        console.log("response delete", response);
+        // console.log("response delete", response);
         if (response) {
           message.success("l'appartement bien été supprimé");
         } else {
         }
       })
       .catch((e) => {
-        console.log("error delete", e);
+        // console.log("error delete", e);
+        message.error("Une erreur est survenue");
         message.error(JSON.stringify("erreur", e));
       });
   };
 
-  console.log("bookings", bookings);
+  // console.log("bookings", bookings);
 
   return (
     <div className="bookingContainer container">
