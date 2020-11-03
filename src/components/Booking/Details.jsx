@@ -8,6 +8,7 @@ import { format } from "date-fns";
 import api from "../../services/api";
 
 import "./Details.less";
+import layout from "../../constants/layout";
 
 const { Meta } = Card;
 
@@ -59,13 +60,6 @@ const BookingDetails = ({ match }) => {
       });
   };
 
-  const layout = {
-    xs: { span: 22, offset: 1 },
-    sm: { span: 18, offset: 3 },
-    md: { span: 20, offset: 2 },
-    lg: { span: 12, offset: 6 },
-    xl: { span: 12, offset: 6 },
-  };
   // console.log("match.params.id", match.params.id);
   return (
     <div className="bookingDetailsContaner container">

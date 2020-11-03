@@ -47,7 +47,7 @@ class Api {
             "Origin, X-Requested-With, Content-Type,Accept",
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Methods":
-            "GET, HEAD,DELETE,PUT,OPTIONS,POST, CONNECTION",
+            "GET, HEAD,DELETE,PUT,OPTIONS,POST,CONNECTION",
           "Access-Control-Request-Method": "DELETE",
           "Cache-Control": "no-cache",
           Connection: "keep-alive",

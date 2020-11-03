@@ -7,8 +7,6 @@ import { RollbackOutlined, SaveOutlined } from "@ant-design/icons";
 import layout from "../../constants/layout";
 import api from "../../services/api";
 
-const Option = Select;
-
 const BookingForm = ({ match }) => {
   const history = useHistory();
   const [form] = Form.useForm();
@@ -41,7 +39,7 @@ const BookingForm = ({ match }) => {
         .fetchCollection("room")
         .then((response) => {
           if (response && "data" in response && response.data.length !== 0) {
-            console.log("response.data", response);
+            // console.log("response.data", response);
             if (response.data.rooms.length !== 0) {
               setRooms(response.data.rooms);
             } else {
