@@ -1,11 +1,23 @@
 import { useHistory, withRouter } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { Input, Form, Button, Row, Col, message } from "antd";
+import {
+  Input,
+  Form,
+  Button,
+  Row,
+  Col,
+  message,
+  DatePicker,
+  Select,
+} from "antd";
+import { RollbackOutlined, SaveOutlined } from "@ant-design/icons";
 
 import "./Form.less";
-import { RollbackOutlined, SaveOutlined } from "@ant-design/icons";
 import api from "../../services/api";
 import layout from "../../constants/layout";
+import { Option } from "antd/lib/mentions";
+
+import moment from "moment";
 
 const CustomersForm = ({ match }) => {
   const history = useHistory();
@@ -18,13 +30,17 @@ const CustomersForm = ({ match }) => {
     const id = match.params.id;
     if (!customerLoaded && id !== undefined) {
       api.fetch("client", id).then((response) => {
-        console.log("response fetch customer", response.data);
+        console.log(
+          "response fetch customer",
+          moment(response.data.client.birthDate, "YYYY-MM-DD")
+        );
+        setCustomer(response.data.client);
         setCustomerLoaded(true);
         form.setFieldsValue({
           firstName: response.data.client.firstName,
           lastName: response.data.client.lastName,
           email: response.data.client.email,
-          birthDate: response.data.client.birthDate,
+          birthDate: moment(response.data.client.birthDate, "YYYY-MM-DD"),
           phone: response.data.client.phone,
         });
       });
@@ -32,38 +48,72 @@ const CustomersForm = ({ match }) => {
   }, [customerLoaded, form, match]);
 
   const onFormFinish = (values) => {
-    console.log("onFormFinish(), values:", values);
-    // check that appartment has one room at least
-    api.create("client", values).then((res) => {
-      if (res.status === 201) {
-        message.success("Le nouvel utilisateur a été enregistré.");
-        console.log("res", res);
-        history.push("/customers");
-      }
-    });
-  };
+    const id = match.params.id;
+    const newCustomer = {
+      lastName: values.lastName,
+      firstName: values.firstName,
+      email: values.email,
+      phone: values.prefix + values.phone,
+      birthDate: moment(values.birthDate).format("YYYY-MM-DD"),
+    };
+    console.log("onFormFinish(), newCustomer:", newCustomer);
 
-  const formLayout = {
-    labelCol: {
-      xs: { span: 24 },
-      md: { span: 4 },
-      lg: { span: 2 },
-    },
-    wrapperCol: {
-      xs: { span: 24 },
-      md: { span: 20 },
-      lg: { span: 22 },
-    },
+    if (id === undefined) {
+      api
+        .create("client", newCustomer)
+        .then((res) => {
+          if (res.status === 201) {
+            message.success("Le nouvel utilisateur a été enregistré.");
+            console.log("res", res);
+            history.push("/customers");
+          }
+        })
+        .catch((e) => {
+          console.log("error post request", e);
+          message.error("Une erreur est survenue.");
+          message.error(JSON.stringify(e));
+        });
+    } else {
+      api
+        .update("client", id, newCustomer)
+        .then((res) => {
+          if (res.status === 201) {
+            message.success("L'utilisateur a été modifé.");
+            console.log("res", res);
+            history.push("/customers");
+          }
+        })
+        .catch((e) => {
+          console.log("error put request", e);
+          message.error("Une erreur est survenue.");
+          message.error(JSON.stringify(e));
+        });
+    }
   };
 
   const getFormItemLayout = () =>
-    Object.keys(formLayout.wrapperCol).reduce((formItemLayout, breakpoint) => {
+    Object.keys(layout.form.wrapperCol).reduce((formItemLayout, breakpoint) => {
       formItemLayout[breakpoint] = {
-        span: formLayout.wrapperCol[breakpoint].span,
-        offset: formLayout.labelCol[breakpoint].span,
+        span: layout.form.wrapperCol[breakpoint].span,
+        offset: layout.form.labelCol[breakpoint].span,
       };
       return formItemLayout;
     }, {});
+
+  function onChange(date, dateString) {
+    console.log(date, dateString);
+    form.setFieldsValue("birthDate", dateString);
+  }
+
+  const prefixSelector = (
+    <Form.Item name="prefix" noStyle>
+      <Select style={{ width: 70 }}>
+        <Option value="33">+33</Option>
+      </Select>
+    </Form.Item>
+  );
+
+  const dateFormatList = "YYYY-MM-DD";
 
   return (
     <div className="customersFormContainer container">
@@ -73,10 +123,10 @@ const CustomersForm = ({ match }) => {
         </h2>
       </div>
       <Row>
-        <Col {...layout}>
+        <Col {...layout.col}>
           <div className="formContainer">
             <Form
-              {...formLayout}
+              {...layout.form}
               initialValues={initialValues}
               form={form}
               onFinish={onFormFinish}
@@ -123,8 +173,8 @@ const CustomersForm = ({ match }) => {
                     message: "Saisissez un email",
                   },
                   {
-                    min: 2,
-                    message: "Votre email est trop court",
+                    type: "email",
+                    message: "Saisissez une adresse e-mail valide",
                   },
                 ]}
               >
@@ -139,14 +189,21 @@ const CustomersForm = ({ match }) => {
                     message: "Saisissez un numéro de téléphone",
                   },
                   {
-                    min: 2,
-                    message: "Votre numéro de téléphone est trop court",
+                    min: 9,
+                    message: "Votre numéro de téléphone est au mauvais format",
+                  },
+                  {
+                    max: 9,
+                    message: "Votre numéro de téléphone est au mauvais format",
                   },
                 ]}
               >
-                <Input placeholder="Numéro de téléphone" type="phone" />
+                <Input
+                  addonBefore={prefixSelector}
+                  style={{ width: "100%" }}
+                  placeholder="Numéro de téléphone"
+                />
               </Form.Item>
-              {/* Upgrade with date picker */}
               <Form.Item
                 label="Date de naissance"
                 name="birthDate"
@@ -155,13 +212,9 @@ const CustomersForm = ({ match }) => {
                     required: true,
                     message: "Saisissez une date de naissance",
                   },
-                  {
-                    min: 2,
-                    message: "Votre une date de naissance est trop courte",
-                  },
                 ]}
               >
-                <Input placeholder="Date de naissance" />
+                <DatePicker onChange={onChange} format={dateFormatList} />
               </Form.Item>
 
               <Form.Item wrapperCol={getFormItemLayout()}>

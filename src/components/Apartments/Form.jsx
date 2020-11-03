@@ -56,6 +56,11 @@ const ApartmentsForm = ({ match }) => {
       })),
     };
 
+    if (newApartment.rooms.length < 1) {
+      console.log("newApartment chambre insuffisantes", newApartment);
+      return message.error("Ajoutez au moins une chambre.");
+    }
+
     api.create("apartment", newApartment).then((response) => {
       console.log("response", response);
       if (response.status === 201) {
@@ -70,8 +75,8 @@ const ApartmentsForm = ({ match }) => {
 
   // ------- rooms management -------
   const [rooms, setRooms] = useState([
-    { number: "1", area: "65m2", price: "500", key: uuidv4() },
-    { number: "2", area: "45m2", price: "300", key: uuidv4() },
+    { number: "1", area: "Nord", price: "500", key: uuidv4() },
+    { number: "2", area: "Est", price: "300", key: uuidv4() },
   ]);
   const [roomsForm] = Form.useForm();
   const [editingKey, setEditingKey] = useState("");
@@ -102,7 +107,7 @@ const ApartmentsForm = ({ match }) => {
                 ? [
                     {
                       required: true,
-                      message: "Saisissez un nom",
+                      message: "Renseignez le champ",
                     },
                   ]
                 : []),
@@ -163,6 +168,18 @@ const ApartmentsForm = ({ match }) => {
 
     try {
       const row = await roomsForm.getFieldsValue();
+      console.log("row", row);
+
+      if (row.number === undefined || row.number === "") {
+        return message.warning("saisissez un numéro");
+      }
+      if (row.area === undefined || row.area === "") {
+        return message.warning("saisissez un emplacement");
+      }
+      if (row.price === undefined || row.price === "") {
+        return message.warning("saisissez une prix");
+      }
+
       const newData = [...rooms];
       const index = rooms.findIndex((item) => key === item.key);
 
@@ -193,7 +210,7 @@ const ApartmentsForm = ({ match }) => {
       editable: true,
     },
     {
-      title: "Surface",
+      title: "Emplacement",
       dataIndex: "area",
       editable: true,
     },
@@ -227,7 +244,7 @@ const ApartmentsForm = ({ match }) => {
           <Space size="middle">
             <Button icon={<EditOutlined />} onClick={() => roomEdit(record)} />
             <Popconfirm
-              title={`Êtes-vous sûr de vouloir supprimer la chambre « ${record.label} » ?`}
+              title={`Êtes-vous sûr de vouloir supprimer la chambre « ${record.area} » ?`}
               onConfirm={() => roomDelete(record)}
             >
               <Button icon={<DeleteOutlined />} type="danger" />
@@ -254,24 +271,11 @@ const ApartmentsForm = ({ match }) => {
     };
   });
 
-  const formLayout = {
-    labelCol: {
-      xs: { span: 24 },
-      md: { span: 4 },
-      lg: { span: 2 },
-    },
-    wrapperCol: {
-      xs: { span: 24 },
-      md: { span: 20 },
-      lg: { span: 22 },
-    },
-  };
-
   const getFormItemLayout = () =>
-    Object.keys(formLayout.wrapperCol).reduce((formItemLayout, breakpoint) => {
+    Object.keys(layout.form.wrapperCol).reduce((formItemLayout, breakpoint) => {
       formItemLayout[breakpoint] = {
-        span: formLayout.wrapperCol[breakpoint].span,
-        offset: formLayout.labelCol[breakpoint].span,
+        span: layout.form.wrapperCol[breakpoint].span,
+        offset: layout.form.labelCol[breakpoint].span,
       };
       return formItemLayout;
     }, {});
@@ -286,15 +290,25 @@ const ApartmentsForm = ({ match }) => {
         </h2>
       </div>
       <Row>
-        <Col {...layout}>
+        <Col {...layout.col}>
           <div className="formContainer">
             <Form
-              {...formLayout}
+              {...layout.form}
               initialValues={initialValues}
               form={form}
               onFinish={onFormFinish}
             >
-              <Form.Item label="Numéro" name="number" value="number">
+              <Form.Item
+                label="Numéro"
+                name="number"
+                value="number"
+                rules={[
+                  {
+                    required: true,
+                    message: "Saisissez un numéro",
+                  },
+                ]}
+              >
                 <Input placeholder="Numéro" value={2} />
               </Form.Item>
 
@@ -304,19 +318,19 @@ const ApartmentsForm = ({ match }) => {
                 rules={[
                   {
                     required: true,
-                    message: "Saisissez un titre",
+                    message: "Saisissez un nom",
                   },
                   {
                     min: 5,
-                    message: "Votre titre est trop court",
+                    message: "Votre nom est trop court",
                   },
                 ]}
               >
                 <Input placeholder="Nom de l'appartement" />
               </Form.Item>
             </Form>
-            <Form form={roomsForm} {...formLayout}>
-              <Form.Item label="Chambres">
+            <Form form={roomsForm} {...layout.form}>
+              <Form.Item label="Chambres" required>
                 <Table
                   components={{
                     body: {

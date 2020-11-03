@@ -6,6 +6,7 @@ import { DeleteOutlined } from "@ant-design/icons";
 import api from "../../services/api";
 
 import "./Details.less";
+import layout from "../../constants/layout";
 
 const { Meta } = Card;
 
@@ -71,13 +72,6 @@ const ApartmentsDetails = ({ match }) => {
       });
   };
 
-  const layout = {
-    xs: { span: 22, offset: 1 },
-    sm: { span: 18, offset: 3 },
-    md: { span: 20, offset: 2 },
-    lg: { span: 12, offset: 6 },
-    xl: { span: 12, offset: 6 },
-  };
   console.log("match.params.id", match.params.id);
   return (
     <div className="apartmentsDetailsContainer container">
@@ -86,7 +80,7 @@ const ApartmentsDetails = ({ match }) => {
       </div>
       <div className="cardContainer">
         <Row>
-          <Col {...layout}>
+          <Col {...layout.col}>
             <Card
               loading={!apartmentsLoaded}
               cover={<img alt="example" src="/assets/img/apart2.jpg" />}

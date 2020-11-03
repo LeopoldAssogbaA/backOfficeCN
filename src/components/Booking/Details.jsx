@@ -73,7 +73,7 @@ const BookingDetails = ({ match }) => {
       </div>
       <div className="cardContainer">
         <Row>
-          <Col {...layout}>
+          <Col {...layout.col}>
             <Card
               loading={!bookingLoaded}
               cover={<img alt="example" src="/assets/img/booking.jpg" />}

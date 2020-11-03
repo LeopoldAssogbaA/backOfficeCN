@@ -122,7 +122,7 @@ const Booking = () => {
         </div>
       </div>
       <Row>
-        <Col {...layout}>
+        <Col {...layout.col}>
           <div className="tableContainer">
             <Table
               loading={!bookingsLoaded}

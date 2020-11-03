@@ -78,24 +78,11 @@ const BookingForm = ({ match }) => {
     // check that question has one room at least
   };
 
-  const formLayout = {
-    labelCol: {
-      xs: { span: 24 },
-      md: { span: 4 },
-      lg: { span: 2 },
-    },
-    wrapperCol: {
-      xs: { span: 24 },
-      md: { span: 20 },
-      lg: { span: 22 },
-    },
-  };
-
   const getFormItemLayout = () =>
-    Object.keys(formLayout.wrapperCol).reduce((formItemLayout, breakpoint) => {
+    Object.keys(layout.form.wrapperCol).reduce((formItemLayout, breakpoint) => {
       formItemLayout[breakpoint] = {
-        span: formLayout.wrapperCol[breakpoint].span,
-        offset: formLayout.labelCol[breakpoint].span,
+        span: layout.form.wrapperCol[breakpoint].span,
+        offset: layout.form.labelCol[breakpoint].span,
       };
       return formItemLayout;
     }, {});
@@ -114,15 +101,25 @@ const BookingForm = ({ match }) => {
         </h2>
       </div>
       <Row>
-        <Col {...layout}>
+        <Col {...layout.col}>
           <div className="formContainer">
             <Form
-              {...formLayout}
+              {...layout.form}
               initialValues={initialValues}
               form={form}
               onFinish={onFormFinish}
             >
-              <Form.Item label="Client" name="clientId" value="clientId">
+              <Form.Item
+                label="Client"
+                name="clientId"
+                value="clientId"
+                rules={[
+                  {
+                    required: true,
+                    message: "Choisissez un client",
+                  },
+                ]}
+              >
                 <Select
                   showSearch
                   placeholder="Choisissez un client"
@@ -154,7 +151,7 @@ const BookingForm = ({ match }) => {
                 rules={[
                   {
                     required: true,
-                    message: "Saisissez un titre",
+                    message: "Choisissez une chambre",
                   },
                 ]}
               >

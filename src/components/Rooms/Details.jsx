@@ -65,7 +65,7 @@ const RoomsDetails = ({ match }) => {
       </div>
       <div className="cardContainer">
         <Row>
-          <Col {...layout}>
+          <Col {...layout.col}>
             <Card
               loading={!roomLoaded}
               cover={<img alt="example" src="/assets/img/bedroom.jpg" />}

@@ -96,7 +96,7 @@ const CustomersDetails = ({ match }) => {
       </div>
       <div className="cardContainer">
         <Row>
-          <Col {...layout}>
+          <Col {...layout.col}>
             <Card
               loading={!customerLoaded}
               cover={<img alt="example" src="/assets/img/avatar.jpg" />}

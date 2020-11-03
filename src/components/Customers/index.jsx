@@ -106,7 +106,7 @@ const Customers = () => {
   const deleteCustomer = (id) => {
     console.log(id);
     api
-      .delete("customers", id)
+      .delete("client", id)
       .then((response) => {
         console.log("response delete", response);
         if (response) {
@@ -133,7 +133,7 @@ const Customers = () => {
         </div>
       </div>
       <Row>
-        <Col {...layout}>
+        <Col {...layout.col}>
           <div className="tableContainer">
             <Table
               loading={!customersLoaded}

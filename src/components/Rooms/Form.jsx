@@ -67,26 +67,20 @@ const RoomsForm = ({ match }) => {
         }
       });
     } else {
-      api.update("room", id, newRoom).then((response) => {
-        if (response.status === 201) {
-          message.success("Votre chambre à été enregistrée.");
-          history.push("/rooms");
-        }
-      });
+      api
+        .update("room", id, newRoom)
+        .then((response) => {
+          if (response.status === 201) {
+            message.success("Votre chambre à été enregistrée.");
+            history.push("/rooms");
+          }
+        })
+        .catch((e) => {
+          console.log("error put request", e);
+          message.error("Une erreur est survenue.");
+          message.error(JSON.stringify(e));
+        });
     }
-  };
-
-  const formLayout = {
-    labelCol: {
-      xs: { span: 24 },
-      md: { span: 4 },
-      lg: { span: 2 },
-    },
-    wrapperCol: {
-      xs: { span: 24 },
-      md: { span: 20 },
-      lg: { span: 22 },
-    },
   };
 
   function onChange(value) {
@@ -96,10 +90,10 @@ const RoomsForm = ({ match }) => {
   console.log("initialValues", initialValues);
 
   const getFormItemLayout = () =>
-    Object.keys(formLayout.wrapperCol).reduce((formItemLayout, breakpoint) => {
+    Object.keys(layout.form.wrapperCol).reduce((formItemLayout, breakpoint) => {
       formItemLayout[breakpoint] = {
-        span: formLayout.wrapperCol[breakpoint].span,
-        offset: formLayout.labelCol[breakpoint].span,
+        span: layout.form.wrapperCol[breakpoint].span,
+        offset: layout.form.labelCol[breakpoint].span,
       };
       return formItemLayout;
     }, {});
@@ -112,15 +106,24 @@ const RoomsForm = ({ match }) => {
         </h2>
       </div>
       <Row>
-        <Col {...layout}>
+        <Col {...layout.col}>
           <div className="formContainer">
             <Form
-              {...formLayout}
+              {...layout.form}
               initialValues={initialValues}
               form={form}
               onFinish={onFormFinish}
             >
-              <Form.Item label="Numéro" name="number">
+              <Form.Item
+                label="Numéro"
+                name="number"
+                rules={[
+                  {
+                    required: true,
+                    message: "Choisissez un numéro",
+                  },
+                ]}
+              >
                 <Input placeholder="Numéro" type="text" />
               </Form.Item>
               {/* TODO: edit validators */}
