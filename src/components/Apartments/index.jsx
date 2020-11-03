@@ -107,7 +107,7 @@ const Apartments = () => {
 
   const deleteApartment = (id) => {
     api
-      .delete("apartments", id)
+      .delete("apartment", id)
       .then((response) => {
         // console.log("response delete", response);
         if (response) {
@@ -116,7 +116,7 @@ const Apartments = () => {
         }
       })
       .catch((e) => {
-        // console.log("error delete", e);
+        console.log("error delete", e);
         message.error(JSON.stringify("erreur", e));
         message.error("Une erreur est survenue");
       });

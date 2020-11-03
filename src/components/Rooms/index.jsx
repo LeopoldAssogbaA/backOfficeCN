@@ -83,7 +83,7 @@ const Rooms = () => {
             onClick={() => history.push(`/rooms/edit/${record.id}`)}
           />
           <Popconfirm
-            title={`Êtes-vous sûr de vouloir supprimer l'appartement « ${record.name} » ?`}
+            title={`Êtes-vous sûr de vouloir supprimer la chambre « ${record.area} » ?`}
             onConfirm={() => deleteRoom(record.id)}
           >
             <Button icon={<DeleteOutlined />} type="danger" />

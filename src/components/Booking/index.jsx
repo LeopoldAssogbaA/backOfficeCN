@@ -83,7 +83,7 @@ const Booking = () => {
             onClick={() => history.push(`booking/edit/${record.id}`)}
           /> */}
           <Popconfirm
-            title={`Êtes-vous sûr de vouloir supprimer l'appartement « ${record.name} » ?`}
+            title={`Êtes-vous sûr de vouloir supprimer la réservation « ${record.client.firstName}  ${record.client.lastName} » ?`}
             onConfirm={() => deleteBooking(record.id)}
           >
             <Button icon={<DeleteOutlined />} type="danger" />
